@@ -1,350 +1,238 @@
 <!DOCTYPE html>
-<html lang="my">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>တက္ကသိုလ်ဝင်စာမေးပွဲ အောင်စာရင်း</title>
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- React & ReactDOM CDN (Production Builds) -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-    
-    <!-- Babel CDN for JSX Parsing -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
+    <title>မြန်မာနိုင်ငံ စာမေးပွဲရလာဒ်များ</title>
+    <!-- Tailwind v4 CDN -->
+    <script src="https://unpkg.com"></script>
+    <!-- React & ReactDOM CDN -->
+    <script src="https://unpkg.com" crossorigin></script>
+    <script src="https://unpkg.com" crossorigin></script>
+    <!-- Babel CDN (For JSX compilation in browser) -->
+    <script src="https://unpkg.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com"></script>
+    <!-- Custom Font Configuration -->
+    <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        /* မြန်မာစာ ဖောင့်အတွက် Fallback */
-        body {
-            font-family: 'Padauk', 'Pyidaungsu', 'Myanmar Text', sans-serif;
-        }
+        body { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 antialiased min-h-screen selection:bg-slate-200">
-    
-    <!-- React Mount Node -->
+<body class="bg-zinc-50 text-zinc-900 antialiased selection:bg-zinc-200">
     <div id="root"></div>
 
     <script type="text/babel">
         const { useState, useEffect, useMemo } = React;
 
-        // Custom Inline SVG Icons to prevent DOM manipulation issues with Lucide script
-        const GraduationCap = ({ className }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-                <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/>
-                <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/>
-            </svg>
-        );
-
-        const Loader2 = ({ className }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-                <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
-            </svg>
-        );
-
-        const AlertTriangle = ({ className }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
-                <line x1="12" y1="9" x2="12" y2="13"/>
-                <line x1="12" y1="17" x2="12.01" y2="17"/>
-            </svg>
-        );
-
-        const Search = ({ className }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-                <circle cx="11" cy="11" r="8"/>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-            </svg>
-        );
-
-        const ChevronRight = ({ className }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-                <polyline points="9 18 15 12 9 6"/>
-            </svg>
-        );
-
-        const ArrowLeft = ({ className }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-                <line x1="19" y1="12" x2="5" y2="12"/>
-                <polyline points="12 19 5 12 12 5"/>
-            </svg>
-        );
-
-        const MapIcon = ({ className }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-                <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/>
-                <line x1="9" y1="3" x2="9" y2="18"/>
-                <line x1="15" y1="6" x2="15" y2="21"/>
-            </svg>
-        );
-
-        const TypeIcon = ({ className }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-                <polyline points="4 7 4 4 20 4 20 7"/>
-                <line x1="9" y1="20" x2="15" y2="20"/>
-                <line x1="12" y1="4" x2="12" y2="20"/>
-            </svg>
-        );
-
-        const Eye = ({ className }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                <circle cx="12" cy="12" r="3"/>
-            </svg>
-        );
-
-        const Download = ({ className }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
-        );
-
-        const SearchX = ({ className }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-                <circle cx="11" cy="11" r="8"/>
-                <path d="m21 21-4.3-4.3"/>
-                <path d="m15 9-6 6"/>
-                <path d="m9 9 6 6"/>
-            </svg>
-        );
-
+        // Repository Paths
+        const REPO_URL = "https://github.com";
+        const RAW_BASE_URL = "https://githubusercontent.com";
+        const CURRENT_YEAR = new Date().getFullYear().toString();
+        const DATA_URL = `${RAW_BASE_URL}/${CURRENT_YEAR}.json`;
         function App() {
-            const currentYear = new Date().getFullYear();
             const [data, setData] = useState([]);
             const [loading, setLoading] = useState(true);
             const [error, setError] = useState(null);
-            const [searchRegion, setSearchRegion] = useState('');
+            
             const [selectedRegion, setSelectedRegion] = useState(null);
-            const [searchDistrict, setSearchDistrict] = useState('');
+            const [regionSearch, setRegionSearch] = useState("");
+            const [districtSearch, setDistrictSearch] = useState("");
 
-            // API မှ အောင်စာရင်းဒေတာ ရယူခြင်း
+            // Repository ထဲမှ JSON ဒေတာကို ဖတ်ခြင်း
             useEffect(() => {
-                const fetchData = async () => {
-                    try {
-                        const repoUrl = `https://raw.githubusercontent.com/kaungkhantjc/exam-scraper/main/${currentYear}.json`;
-                        const response = await fetch(repoUrl);
-                        if (!response.ok) throw new Error('Network response was not ok');
-                        const jsonData = await response.json();
-                        setData(jsonData);
-                    } catch (err) {
-                        console.error("Data fetch error:", err);
-                        setError(`${currentYear} ခုနှစ်အတွက် အောင်စာရင်း ဒေတာ မရရှိနိုင်သေးပါ။`);
-                    } finally {
+                fetch(DATA_URL)
+                    .then(res => {
+                        if (!res.ok) throw new Error("ယခုနှစ်အတွက် အောင်စာရင်း Data မတွေ့ရှိသေးပါ။");
+                        return res.json();
+                    })
+                    .then(json => {
+                        setData(json);
                         setLoading(false);
-                    }
-                };
-                fetchData();
-            }, [currentYear]);
+                    })
+                    .catch(err => {
+                        setError(err.message);
+                        setLoading(false);
+                    });
+            }, []);
 
-            // Regions များကို ရှာဖွေစစ်ထုတ်ခြင်း
+            // Icon များ ပုံမှန်အလုပ်လုပ်ရန် စစ်ဆေးခြင်း
+            useEffect(() => {
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            }, [data, selectedRegion, regionSearch, districtSearch, loading, error]);
+
+            // တိုင်းဒေသကြီးများကို Filter လုပ်ခြင်း
             const filteredRegions = useMemo(() => {
-                if (!searchRegion.trim()) return data;
-                const query = searchRegion.toLowerCase();
-                return data.filter(item => item.region.toLowerCase().includes(query));
-            }, [data, searchRegion]);
+                return data.filter(r => 
+                    r.region.toLowerCase().includes(regionSearch.toLowerCase())
+                );
+            }, [data, regionSearch]);
 
-            // Districts များကို ရှာဖွေစစ်ထုတ်ခြင်း
+            // ခရိုင်၊ စာစစ်ဌာန၊ အက္ခရာများအားလုံးကို Filter လုပ်ခြင်း
             const filteredDistricts = useMemo(() => {
                 if (!selectedRegion) return [];
-                if (!searchDistrict.trim()) return selectedRegion.districts;
-                const query = searchDistrict.toLowerCase();
+                const search = districtSearch.toLowerCase();
                 return selectedRegion.districts.filter(d => 
-                    (d.name && d.name.toLowerCase().includes(query)) ||
-                    (d.department && d.department.toLowerCase().includes(query)) ||
-                    (d.alphabet && d.alphabet.toLowerCase().includes(query))
+                    d.name.toLowerCase().includes(search) ||
+                    d.department.toLowerCase().includes(search) ||
+                    d.alphabet.toLowerCase().includes(search)
                 );
-            }, [selectedRegion, searchDistrict]);
+            }, [selectedRegion, districtSearch]);
 
-            // တိုင်းဒေသကြီး ရွေးချယ်ခြင်း
-            const handleSelectRegion = (region) => {
-                setSelectedRegion(region);
-                setSearchDistrict('');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+            // View နှင့် Download URL သတ်မှတ်ခြင်း
+            const getPdfUrls = (filePath) => {
+                const fullPath = `${CURRENT_YEAR}/${filePath}`;
+                const rawPdfUrl = `${RAW_BASE_URL}/${fullPath}`;
+                const viewUrl = `https://google.com{encodeURIComponent(rawPdfUrl)}`;
+                return { downloadUrl: rawPdfUrl, viewUrl };
             };
+            if (loading) {
+                return (
+                    <div class="flex flex-col items-center justify-center min-h-screen p-4">
+                        <div class="w-8 h-8 border-4 border-zinc-900 border-t-transparent rounded-full animate-spin"></div>
+                        <p class="mt-4 text-sm text-zinc-500 font-medium">ဒေတာများ ရယူနေပါသည်...</p>
+                    </div>
+                );
+            }
 
-            // မူလစာမျက်နှာသို့ ပြန်သွားခြင်း
-            const handleBack = () => {
-                setSelectedRegion(null);
-            };
-
-            // PDF ဒေါင်းလုပ် ရယူရန် URL လင့်ခ်ဖန်တီးခြင်း
-            const getPdfUrl = (filePath) => {
-                return `https://raw.githubusercontent.com/kaungkhantjc/exam-scraper/main/${currentYear}/${filePath}`;
-            };
-
-            // Google Docs Viewer ဖြင့် PDF တိုက်ရိုက်ကြည့်ရှုရန် URL လင့်ခ်ဖန်တီးခြင်း
-            const getViewUrl = (filePath) => {
-                const rawPdfUrl = getPdfUrl(filePath);
-                return `https://docs.google.com/gview?url=${encodeURIComponent(rawPdfUrl)}`;
-            };
+            if (error) {
+                return (
+                    <div class="flex flex-col items-center justify-center min-h-screen p-4 text-center">
+                        <div class="p-3 bg-red-50 text-red-600 rounded-full mb-3">
+                            <i data-lucide="alert-circle" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-zinc-900">အမှားအယွင်း ရှိခဲ့ပါသည်</h3>
+                        <p class="mt-1 text-sm text-zinc-500 max-w-sm">{error}</p>
+                    </div>
+                );
+            }
 
             return (
-                <main class="max-w-2xl mx-auto px-4 py-8 md:py-12">
-                    
+                <div class="max-w-md mx-auto min-h-screen flex flex-col bg-white border-x border-zinc-100 shadow-sm">
                     {/* Header */}
-                    <header class="mb-8 text-center md:text-left space-y-2">
-                        <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-slate-950 flex items-center justify-center md:justify-start gap-2.5">
-                            <GraduationCap className="w-8 h-8 text-slate-700" />
-                            <span>{currentYear} ခုနှစ် တက္ကသိုလ်ဝင်စာမေးပွဲ အောင်စာရင်း</span>
-                        </h1>
-                        <p class="text-sm text-slate-500 font-medium">မြန်မာနိုင်ငံစာစစ်ဦးစီးဌာန - ပညာရေးဝန်ကြီးဌာန</p>
-                    </header>
-
-                    {/* Loading State */}
-                    {loading && (
-                        <div class="flex flex-col items-center justify-center py-24 text-slate-500">
-                            <Loader2 className="w-8 h-8 animate-spin mb-4 text-slate-400" />
-                            <p class="text-sm font-medium animate-pulse">အချက်အလက်များ ရယူနေပါသည်...</p>
-                        </div>
-                    )}
-
-                    {/* Error State */}
-                    {!loading && error && (
-                        <div class="rounded-xl border border-red-200 bg-red-50/50 p-6 text-center">
-                            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-100 mb-4">
-                                <AlertTriangle className="w-6 h-6 text-red-600" />
+                    <header class="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-zinc-100 p-4 flex items-center justify-between">
+                        {selectedRegion ? (
+                            <button 
+                                onClick={() => { setSelectedRegion(null); setDistrictSearch(""); }}
+                                class="inline-flex items-center justify-center w-9 h-9 rounded-md border border-zinc-200 hover:bg-zinc-50 transition-colors"
+                            >
+                                <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                            </button>
+                        ) : (
+                            <div class="inline-flex items-center justify-center w-9 h-9 bg-zinc-900 text-white rounded-md">
+                                <i data-lucide="graduation-cap" class="w-4 h-4"></i>
                             </div>
-                            <h3 class="font-semibold text-red-900">{error}</h3>
-                            <p class="text-sm text-red-600 mt-2">ယခုနှစ်အတွက် စနစ်ထဲတွင် ဒေတာမရှိသေးပါ။</p>
-                        </div>
-                    )}
+                        )}
+                        <h1 class="text-base font-semibold tracking-tight text-zinc-900 text-center flex-1">
+                            {selectedRegion ? selectedRegion.region : `စာမေးပွဲရလာဒ်များ (${CURRENT_YEAR})`}
+                        </h1>
+                        <div class="w-9"></div>
+                    </header>
+                    {/* Main Content */}
+                    <main class="flex-1 p-4">
+                        {!selectedRegion ? (
+                            /* HOME PAGE: REGION LIST */
+                            <div class="space-y-4">
+                                <div class="relative">
+                                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400"></i>
+                                    <input 
+                                        type="text" 
+                                        placeholder="တိုင်းဒေသကြီး / ပြည်နယ် ရှာရန်..." 
+                                        value={regionSearch}
+                                        onChange={(e) => setRegionSearch(e.target.value)}
+                                        class="w-full pl-9 pr-4 py-2 text-sm bg-zinc-50 border border-zinc-200 rounded-md focus:outline-none focus:border-zinc-400 focus:bg-white transition-all placeholder:text-zinc-400"
+                                    />
+                                </div>
 
-                    {/* Main Content Area */}
-                    {!loading && !error && (
-                        <div>
-                            {/* 1. တိုင်းနှင့် ပြည်နယ် ရွေးချယ်ရန် (Region View) */}
-                            {!selectedRegion ? (
-                                <div class="transition-all duration-300">
-                                    {/* Region Search */}
-                                    <div class="relative mb-6">
-                                        <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
-                                        <input 
-                                            type="text" 
-                                            value={searchRegion}
-                                            onChange={(e) => setSearchRegion(e.target.value)}
-                                            placeholder="တိုင်းနှင့် ပြည်နယ် ရှာဖွေရန်..." 
-                                            class="flex h-11 w-full rounded-lg border border-slate-200 bg-white pl-10 pr-4 py-2 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900 transition-all shadow-sm"
-                                        />
-                                    </div>
-
-                                    {/* Region List */}
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                        {filteredRegions.map((item) => (
-                                            <button 
-                                                key={item.region}
-                                                onClick={() => handleSelectRegion(item)} 
-                                                class="group w-full text-left rounded-xl border border-slate-200 bg-white p-4 shadow-sm hover:border-slate-300 hover:shadow-md transition-all flex items-center justify-between"
+                                <div class="grid grid-cols-1 gap-2">
+                                    {filteredRegions.length > 0 ? (
+                                        filteredRegions.map((r, idx) => (
+                                            <button
+                                                key={idx}
+                                                onClick={() => setSelectedRegion(r)}
+                                                class="flex items-center justify-between p-3.5 border border-zinc-200 rounded-lg hover:bg-zinc-50 transition-colors text-left group"
                                             >
-                                                <div class="space-y-1">
-                                                    <h3 class="font-semibold text-slate-800 group-hover:text-slate-950 transition-colors">{item.region}</h3>
-                                                    <p class="text-xs font-medium text-slate-500">
-                                                        စာစစ်ဌာနပေါင်း <span class="text-slate-700">{item.districts.length}</span> ခု
-                                                    </p>
+                                                <div class="space-y-0.5">
+                                                    <div class="text-sm font-medium text-zinc-900">{r.region}</div>
+                                                    <div class="text-xs text-zinc-400">{r.districts.length} စာစစ်ဌာနစုစုပေါင်း</div>
                                                 </div>
-                                                <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-slate-900 transition-colors" />
+                                                <i data-lucide="chevron-right" class="w-4 h-4 text-zinc-400 group-hover:text-zinc-600 transition-colors"></i>
                                             </button>
-                                        ))}
-                                    </div>
-
-                                    {/* Empty State (Region Search) */}
-                                    {filteredRegions.length === 0 && (
-                                        <div class="text-center py-12 text-slate-500">
-                                            <p class="text-sm">ရှာဖွေမှုနှင့် ကိုက်ညီသော ရလဒ်မရှိပါ။</p>
-                                        </div>
+                                        ))
+                                    ) : (
+                                        <p class="text-center py-8 text-sm text-zinc-400">ရှာဖွေမှုမတွေ့ရှိပါ။</p>
                                     )}
                                 </div>
-                            ) : (
-                                /* 2. ခရိုင်နှင့် စာစစ်ဌာနများ ပြသရန် (District View) */
-                                <div class="transition-all duration-300">
-                                    {/* Header Actions */}
-                                    <div class="flex items-center gap-3 mb-6">
-                                        <button 
-                                            onClick={handleBack} 
-                                            class="inline-flex h-9 items-center justify-center rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-900 hover:bg-slate-100 hover:text-slate-900 transition-colors shadow-sm"
-                                        >
-                                            <ArrowLeft className="h-4 w-4 mr-1.5" /> နောက်သို့
-                                        </button>
-                                        <h2 class="text-lg font-bold text-slate-900 line-clamp-1">{selectedRegion.region}</h2>
-                                    </div>
+                            </div>
+                        ) : (
+                            /* DETAIL PAGE: DISTRICTS LIST */
+                            <div class="space-y-4">
+                                <div class="relative">
+                                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400"></i>
+                                    <input 
+                                        type="text" 
+                                        placeholder="ခရိုင်၊ စာစစ်ဌာန သို့မဟုတ် အက္ခရာဖြင့် ရှာရန်..." 
+                                        value={districtSearch}
+                                        onChange={(e) => setDistrictSearch(e.target.value)}
+                                        class="w-full pl-9 pr-4 py-2 text-sm bg-zinc-50 border border-zinc-200 rounded-md focus:outline-none focus:border-zinc-400 focus:bg-white transition-all placeholder:text-zinc-400"
+                                    />
+                                </div>
 
-                                    {/* District Search */}
-                                    <div class="relative mb-6">
-                                        <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
-                                        <input 
-                                            type="text" 
-                                            value={searchDistrict}
-                                            onChange={(e) => setSearchDistrict(e.target.value)}
-                                            placeholder="ခရိုင်၊ စာစစ်ဌာန (သို့) အက္ခရာ ဖြင့် ရှာပါ..." 
-                                            class="flex h-11 w-full rounded-lg border border-slate-200 bg-white pl-10 pr-4 py-2 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900 transition-all shadow-sm"
-                                        />
-                                    </div>
-
-                                    {/* Districts List */}
-                                    <div class="space-y-3">
-                                        {filteredDistricts.map((district) => (
-                                            <div 
-                                                key={district.name + district.department + district.alphabet}
-                                                class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all hover:border-slate-300"
-                                            >
-                                                {/* Information */}
-                                                <div class="flex-1 space-y-1">
-                                                    <h3 class="font-semibold text-slate-900 text-base leading-tight">{district.department}</h3>
-                                                    <div class="flex flex-wrap items-center gap-3 text-sm text-slate-500 pt-1">
-                                                        <span class="inline-flex items-center gap-1.5 font-medium text-slate-600">
-                                                            <MapIcon className="h-3.5 w-3.5" />
-                                                            <span>{district.name}</span>
+                                <div class="space-y-3">
+                                    {filteredDistricts.length > 0 ? (
+                                        filteredDistricts.map((d, idx) => {
+                                            const urls = getPdfUrls(d.file);
+                                            return (
+                                                <div key={idx} class="p-4 border border-zinc-200 rounded-xl space-y-3 bg-white shadow-xs">
+                                                    <div>
+                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-zinc-100 text-zinc-800 mb-1.5">
+                                                            {d.name}ခရိုင်
                                                         </span>
-                                                        <span class="text-slate-300">•</span>
-                                                        <span class="inline-flex items-center gap-1.5 font-medium text-slate-600">
-                                                            <TypeIcon className="h-3.5 w-3.5" />
-                                                            <span>အက္ခရာ <span class="text-slate-900">{district.alphabet}</span></span>
-                                                        </span>
+                                                        <h3 class="text-sm font-semibold text-zinc-900 leading-snug">{d.department}</h3>
+                                                        <p class="text-xs text-zinc-500 mt-0.5">စာမေးပွဲခုံအက္ခရာ - <span class="font-medium text-zinc-700">{d.alphabet}</span></p>
+                                                    </div>
+                                                    
+                                                    <div class="grid grid-cols-2 gap-2 pt-1">
+                                                        <a 
+                                                            href={urls.viewUrl} 
+                                                            target="_blank" 
+                                                            rel="noopener noreferrer"
+                                                            class="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-zinc-200 rounded-md hover:bg-zinc-50 text-zinc-700 transition-colors"
+                                                        >
+                                                            <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                                                            ဖတ်ရန်
+                                                        </a>
+                                                        <a 
+                                                            href={urls.downloadUrl} 
+                                                            download
+                                                            target="_blank"
+                                                            class="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-zinc-900 text-white rounded-md hover:bg-zinc-800 transition-colors"
+                                                        >
+                                                            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                                                            ဒေါင်းလုဒ်
+                                                        </a>
                                                     </div>
                                                 </div>
-
-                                                {/* Buttons (Direct View & Download) */}
-                                                <div class="flex items-center gap-2 w-full md:w-auto shrink-0">
-                                                    <a 
-                                                        href={getViewUrl(district.file)} 
-                                                        target="_blank" 
-                                                        rel="noopener noreferrer"
-                                                        class="inline-flex h-9 flex-1 md:flex-none items-center justify-center rounded-md border border-slate-200 bg-white px-4 text-sm font-medium text-slate-900 hover:bg-slate-100 hover:text-slate-900 transition-colors shadow-sm"
-                                                    >
-                                                        <Eye className="h-4 w-4 mr-2" /> ကြည့်မည်
-                                                    </a>
-                                                    <a 
-                                                        href={getPdfUrl(district.file)} 
-                                                        target="_blank" 
-                                                        rel="noopener noreferrer"
-                                                        class="inline-flex h-9 flex-1 md:flex-none items-center justify-center rounded-md bg-slate-900 px-4 text-sm font-medium text-white hover:bg-slate-800 transition-colors shadow-sm"
-                                                    >
-                                                        <Download className="h-4 w-4 mr-2" /> ဒေါင်းလုပ်
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        ))}
-
-                                        {/* Empty State (District Search) */}
-                                        {filteredDistricts.length === 0 && (
-                                            <div class="text-center py-12 text-slate-500 rounded-xl border border-dashed border-slate-300 bg-slate-50">
-                                                <SearchX className="w-8 h-8 mx-auto mb-3 text-slate-400" />
-                                                <p class="text-sm font-medium">ရှာဖွေမှုနှင့် ကိုက်ညီသော စာစစ်ဌာန မရှိပါ။</p>
-                                            </div>
-                                        )}
-                                    </div>
+                                            );
+                                        })
+                                    ) : (
+                                        <p class="text-center py-8 text-sm text-zinc-400">ရှာဖွေမှုမတွေ့ရှိပါ။</p>
+                                    )}
                                 </div>
-                            )}
-                        </div>
-                    )}
-                </main>
+                            </div>
+                        )}
+                    </main>
+                    {/* Footer */}
+                    <footer class="p-4 border-t border-zinc-100 bg-zinc-50/50 text-center">
+                        <p class="text-xs text-zinc-400">Data source: myanmarexam.org</p>
+                    </footer>
+                </div>
             );
         }
 
-        // React 18 Render setup
+        // App အား စတင် Render လုပ်ခြင်း
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
