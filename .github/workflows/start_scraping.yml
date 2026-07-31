@@ -3,8 +3,8 @@ name: start_scraping
 # ၁၅ မိနစ်တစ်ကြိမ် Auto run ရန်နှင့် Manual run နိုင်ရန် သတ်မှတ်ခြင်း
 
 on:
-   schedule:
-     - cron: '*/15 * * * *'
+  # schedule:
+  #   - cron: '*/15 * * * *'
   workflow_dispatch:
 
 # Repo အတွင်းသို့ ဖိုင်များပြန်လည် သိမ်းဆည်းနိုင်ရန် Permission ပေးခြင်း
