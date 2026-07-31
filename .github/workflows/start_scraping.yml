@@ -1,18 +1,15 @@
 name: start_scraping
 
-# ၁၅ မိနစ်တစ်ကြိမ် Auto run ရန်နှင့် Manual run နိုင်ရန် သတ်မှတ်ခြင်း
-
 on:
-   schedule:
-     - cron: '*/15 * * * *'
+  schedule:
+    - cron: '*/15 * * * *'
   workflow_dispatch:
 
-# Repo အတွင်းသို့ ဖိုင်များပြန်လည် သိမ်းဆည်းနိုင်ရန် Permission ပေးခြင်း
 permissions:
   contents: write
 
 jobs:
-  scrape-data:
+  scrape_and_download:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,18 +20,28 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+        #  cache: 'pip'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install scrapy
+          pip install scrapy requests
 
-      - name: Run Scraper Script
-        run: python scraper.py
+      - name: Run Scraping Script
+        run: |
+          python scraper.py
 
       - name: Commit and Push changes
         run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git diff --staged --quiet || (git commit -m "Auto-update exam results and download PDFs" && git push)
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@://github.com"
+          
+          git add *.json
+          git add */*/*.pdf || true
+          
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Automated: Update exam results and download PDFs [skip ci]"
+            git push
+          fi
